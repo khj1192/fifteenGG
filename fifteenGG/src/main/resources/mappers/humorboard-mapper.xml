@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="EUC-KR"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="humorboard-mapper">
+    <resultMap type="com.kh.fifteenGG.humorBoard.model.vo.Comment" id="commentMap">
+        <result column="CMTNO" property="cmtNo"/>
+        <result column="HUMORBNO" property="humorBno"/>
+        <result column="USERNO" property="userNo"/>
+        <result column="NICKNAME" property="nickName"/>
+        <result column="CMTCONTENT" property="cmtContent"/>
+    </resultMap>
+    <select id="selectList" resultType="humorBoard">
+SELECT HB.* FROM HUMORBOARD HB ORDER BY HUMORDATE DESC
+</select>
+    <select id="selectTotalContents" resultType="int"> SELECT COUNT(*) FROM HUMORBOARD </select>
+
+
+    <insert id="insertBoard" parameterType="humorBoard">
+INSERT INTO HUMORBOARD 
+VALUES(SEQ_HUMORB.NEXTVAL, #{userNo}, #{humorTitle}, #{humorWriter}, #{humorContent}, SYSDATE, DEFAULT)
+</insert>
+    <select id="selectBoard" parameterType="_int" resultType="humorBoard">
+SELECT *
+FROM HUMORBOARD 
+WHERE HUMORBNO = #{HUMORBNO}
+</select>
+    <delete id="deleteBoard" parameterType="int"> DELETE FROM HUMORBOARD WHERE HUMORBNO = #{HUMORBNO}
+</delete>
+
+    <update id="updateBoard" parameterType="humorBoard">
+    UPDATE HUMORBOARD SET HUMORTITLE = #{humorTitle} , HUMORCONTENT = #{humorContent} WHERE HUMORBNO = #{humorbNo}
+</update>
+
+    <!-- 댓글 등록 -->
+    <insert id="insertComment" parameterType="Comment">
+INSERT INTO HCOMMENT
+VALUES(SEQ_CNO.NEXTVAL, #{humorBno}, #{userNo}, #{nickName}, #{cmtContent}, SYSDATE)
+</insert>
+    <!-- 댓글 리스트 -->
+
+<select id="selectCmtList" parameterType="Comment" resultMap="commentMap"> 
+    SELECT nickName , cmtContent, cmtDate, cmtNo, userNo  FROM HCOMMENT WHERE HUMORBNO=#{humorBno} 
+    </select>
+
+    <!-- 댓글 삭제 -->
+   <delete id="deleteCmt" parameterType="int" >
+   DELETE FROM HCOMMENT WHERE CMTNO= #{cmtNo} 
+   </delete>
+
+    <update id="readCount" parameterType="int">
+UPDATE HUMORBOARD SET HUMORBOARDCOUNT = HUMORBOARDCOUNT +1 WHERE HUMORBNO = #{humorbNo}
+</update>
+
+
+</mapper>

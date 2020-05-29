@@ -1,0 +1,419 @@
+create table MEMBER
+(
+    USERNO   NUMBER        not null
+        primary key,
+    EMAIL    VARCHAR2(30)
+        unique,
+    NICKNAME VARCHAR2(20)  not null,
+    PASSWORD VARCHAR2(100) not null
+)
+/
+
+create table CHAMPION
+(
+    CHAMPIONID   VARCHAR2(100) not null
+        primary key,
+    CHAMPNAME    VARCHAR2(100),
+    CHAMPFULLIMG VARCHAR2(100)
+)
+/
+
+create table SUMMONERSPELL
+(
+    SPELLNO   NUMBER not null
+        primary key,
+    SPELLNAME VARCHAR2(100),
+    SPELLID   VARCHAR2(100)
+)
+/
+
+create table MATCH
+(
+    GAMECREATION NUMBER,
+    GAMEDURATION NUMBER,
+    GAMEID       NUMBER not null
+        primary key,
+    GAMEMODE     VARCHAR2(1000),
+    GAMETYPE     VARCHAR2(1000),
+    GAMEVERSION  VARCHAR2(1000),
+    MAPID        NUMBER,
+    PLATFORMID   VARCHAR2(1000),
+    QUEUEID      NUMBER,
+    SEASONID     NUMBER
+)
+/
+
+create table TEAMSTATS
+(
+    GAMEID               NUMBER
+        constraint FK_GAMEID
+            references MATCH
+                on delete cascade,
+    BARONKILLS           NUMBER,
+    DOMINIONVICTORYSCORE NUMBER,
+    DRAGONKILLS          NUMBER,
+    FIRSTBARON           VARCHAR2(100),
+    FIRSTBLOOD           VARCHAR2(100),
+    FIRSTDRAGON          VARCHAR2(100),
+    FIRSTINHIBITOR       VARCHAR2(100),
+    FIRSTRIFTHERALD      VARCHAR2(100),
+    FIRSTTOWER           VARCHAR2(100),
+    INHIBITORKILLS       NUMBER,
+    RIFTHERALDKILLS      NUMBER,
+    TEAMID               NUMBER,
+    TOWERKILLS           NUMBER,
+    VILEMAWKILLS         NUMBER,
+    WIN                  VARCHAR2(100)
+)
+/
+
+create table TEAMBANS
+(
+    GAMEID     NUMBER
+        constraint FK_TBGAMEID
+            references MATCH
+                on delete cascade,
+    TEAMID     NUMBER,
+    CHAMPIONID NUMBER,
+    PICKTURN   NUMBER
+)
+/
+
+create table PARTICIPANTIDENTITY
+(
+    GAMEID        NUMBER
+        constraint FK_PIGAMEID
+            references MATCH
+                on delete cascade,
+    PARTICIPANTID NUMBER
+)
+/
+
+create table PLAYER
+(
+    GAMEID            NUMBER
+        constraint FK_PLGAMEID
+            references MATCH
+                on delete cascade,
+    PARTICIPANTID     NUMBER,
+    ACCOUNTID         VARCHAR2(1000),
+    CURRENTACCOUNTID  VARCHAR2(1000),
+    CURRENTPLATFORMID VARCHAR2(1000),
+    MATCHHISTORYURI   VARCHAR2(1000),
+    PLATFORMID        VARCHAR2(1000),
+    PROFILEICON       NUMBER,
+    SUMMONERID        VARCHAR2(1000),
+    SUMMONERNAME      VARCHAR2(1000)
+)
+/
+
+create table PATICIPANT
+(
+    GAMEID        NUMBER
+        constraint FK_PGAMEID
+            references MATCH
+                on delete cascade,
+    CHAMPIONID    NUMBER,
+    PARTICIPANTID NUMBER,
+    SPELL1ID      NUMBER
+        constraint FK_SPELL1
+            references SUMMONERSPELL,
+    SPELL2ID      NUMBER
+        constraint FK_SPELL2
+            references SUMMONERSPELL,
+    TEAMID        NUMBER
+)
+/
+
+create table PARTICIPANTSTATS
+(
+    GAMEID                         NUMBER
+        constraint FK_PSAMEID
+            references MATCH
+                on delete cascade,
+    ALTARSCAPTURED                 NUMBER,
+    ALTARSNEUTRALIZED              NUMBER,
+    ASSISTS                        NUMBER,
+    CHAMPLEVEL                     NUMBER,
+    COMBATPLAYERSCORE              NUMBER,
+    DAMAGEDEALTTOOBJECTIVES        NUMBER,
+    DAMAGEDEALTTOTURRETS           NUMBER,
+    DAMAGESELFMITIGATED            NUMBER,
+    DEATHS                         NUMBER,
+    DOUBLEKILLS                    NUMBER,
+    FIRSTBLOODASSIST               VARCHAR2(100),
+    FIRSTBLOODKILL                 VARCHAR2(100),
+    FIRSTINHIBITORASSIST           VARCHAR2(100),
+    FIRSTINHIBITORKILL             VARCHAR2(100),
+    FIRSTTOWERASSIST               VARCHAR2(100),
+    FIRSTTOWERKILL                 VARCHAR2(100),
+    GOLDEARNED                     NUMBER,
+    GOLDSPENT                      NUMBER,
+    INHIBITORKILLS                 NUMBER,
+    ITEM0                          NUMBER,
+    ITEM1                          NUMBER,
+    ITEM2                          NUMBER,
+    ITEM3                          NUMBER,
+    ITEM4                          NUMBER,
+    ITEM5                          NUMBER,
+    ITEM6                          NUMBER,
+    KILLINGSPREES                  NUMBER,
+    KILLS                          NUMBER,
+    LARGESTCRITICALSTRIKE          NUMBER,
+    LARGESTKILLINGSPREE            NUMBER,
+    LARGESTMULTIKILL               NUMBER,
+    LONGESTTIMESPENTLIVING         NUMBER,
+    MAGICDAMAGEDEALT               NUMBER,
+    MAGICDAMAGEDEALTTOCHAMPIONS    NUMBER,
+    MAGICALDAMAGETAKEN             NUMBER,
+    NEUTRAKMINIONSKILLED           NUMBER,
+    NEUTRAKMINIONSKILLEDENEMYJG    NUMBER,
+    NEUTRAKMINIONSKILLEDTEAMJUNGLE NUMBER,
+    NODECAPTURE                    NUMBER,
+    NODECAPTUREASSIST              NUMBER,
+    NODENEUTRALIZE                 NUMBER,
+    NODENEUTRALIZEASSIST           NUMBER,
+    OBJECTIVEPLAYERSCORE           NUMBER,
+    PARTICIPANTID                  NUMBER,
+    PENTAKILLS                     NUMBER,
+    PHYSICALDAMAGEDEALT            NUMBER,
+    PHYSICALDAMAGEDEALTTOCHAMPIONS NUMBER,
+    PHYSICALDAMAGETAKEN            NUMBER,
+    QUADRAKILLS                    NUMBER,
+    SIGHTWARDSBOUGHTINGAME         NUMBER,
+    TEAMOBJECTIVE                  NUMBER,
+    TIMECCINGOTHERS                NUMBER,
+    TOTALDAMAGEDEALT               NUMBER,
+    TOTALDAMAGEDEALTTOCHAMPIONS    NUMBER,
+    TOTALDAMAGETAKEN               NUMBER,
+    TOTALHEAL                      NUMBER,
+    TOTALMINIONSKILLED             NUMBER,
+    TOTALPLAYERSCORE               NUMBER,
+    TOTALSCORERANK                 NUMBER,
+    TOTALTIMECROWDCONTROLDEALT     NUMBER,
+    TOTALUNITSHEALED               NUMBER,
+    TRIPLEKILLS                    NUMBER,
+    TRUEDAMAGEDEALT                NUMBER,
+    TRUEDAMAGEDEALTTOCHAMPIONS     NUMBER,
+    TRUEDAMAGETAKEN                NUMBER,
+    TURRETKILLS                    NUMBER,
+    UNREALKILLS                    NUMBER,
+    VISIONSCORE                    NUMBER,
+    VISIONWARDSBOUGHTINGAME        NUMBER,
+    WARDSKILLED                    NUMBER,
+    WARDSPLACED                    NUMBER,
+    WIN                            VARCHAR2(100),
+    PERK0                          NUMBER,
+    PERK1                          NUMBER,
+    PERK2                          NUMBER,
+    PERK3                          NUMBER,
+    PERK4                          NUMBER,
+    PERK5                          NUMBER,
+    PERK0VAR1                      NUMBER,
+    PERK0VAR2                      NUMBER,
+    PERK0VAR3                      NUMBER,
+    PERK1VAR1                      NUMBER,
+    PERK1VAR2                      NUMBER,
+    PERK1VAR3                      NUMBER,
+    PERK2VAR1                      NUMBER,
+    PERK2VAR2                      NUMBER,
+    PERK2VAR3                      NUMBER,
+    PERK3VAR1                      NUMBER,
+    PERK3VAR2                      NUMBER,
+    PERK3VAR3                      NUMBER,
+    PERK4VAR1                      NUMBER,
+    PERK4VAR2                      NUMBER,
+    PERK4VAR3                      NUMBER,
+    PERK5VAR1                      NUMBER,
+    PERK5VAR2                      NUMBER,
+    PERK5VAR3                      NUMBER,
+    PLAYERSCORE0                   NUMBER,
+    PLAYERSCORE1                   NUMBER,
+    PLAYERSCORE2                   NUMBER,
+    PLAYERSCORE3                   NUMBER,
+    PLAYERSCORE4                   NUMBER,
+    PLAYERSCORE5                   NUMBER,
+    PLAYERSCORE6                   NUMBER,
+    PLAYERSCORE7                   NUMBER,
+    PLAYERSCORE8                   NUMBER,
+    PLAYERSCORE9                   NUMBER,
+    PERKPRIMARYSTYLE               NUMBER,
+    PERKSUBSTYLE                   NUMBER,
+    STATPERK0                      NUMBER,
+    STATPERK1                      NUMBER,
+    STATPERK2                      NUMBER,
+    POSITION                       NUMBER
+)
+/
+
+create table PARTICIPANTTIMELINE
+(
+    GAMEID        NUMBER
+        constraint FK_PTGAMEID
+            references MATCH
+                on delete cascade,
+    LANE          VARCHAR2(1000),
+    PARTICIPANTID NUMBER,
+    ROLE          VARCHAR2(1000)
+)
+/
+
+create table MATCHREFERENCE
+(
+    CHAMPION     NUMBER,
+    GAMEID       NUMBER,
+    LANE         VARCHAR2(1000),
+    PLATFORMID   VARCHAR2(1000),
+    QUEUE        NUMBER,
+    ROLE         VARCHAR2(1000),
+    SEASON       NUMBER,
+    TIMESTAMP    NUMBER,
+    SUMMONERID   VARCHAR2(1000),
+    SUMMONERNAME VARCHAR2(1000)
+)
+/
+
+create table MATCHFRAME
+(
+    GAMEID    NUMBER
+        constraint FK_MFGAMEID
+            references MATCH
+                on delete cascade,
+    TIMESTAMP NUMBER
+)
+/
+
+create table MATCHPARTICIPANTFRAME
+(
+    GAMEID              NUMBER
+        constraint FK_MFOGAMEID
+            references MATCH
+                on delete cascade,
+    CURRENTGOLD         NUMBER,
+    DOMINIONSCORE       NUMBER,
+    JUNGLEMINIONSKILLED NUMBER,
+    PLEVEL              NUMBER,
+    MINIONSKILLED       NUMBER,
+    PARTICIPANTID       NUMBER,
+    TEAMSCORE           NUMBER,
+    TOTALGOLD           NUMBER,
+    XP                  NUMBER
+)
+/
+
+create table MATCHPOSITION
+(
+    GAMEID        NUMBER
+        constraint FK_MPOGAMEID
+            references MATCH
+                on delete cascade,
+    TIMESTAMP     NUMBER,
+    PARTICIPANTID NUMBER,
+    X             NUMBER,
+    Y             NUMBER
+)
+/
+
+create table TIPBOARD
+(
+    TIPBNO       NUMBER not null
+        constraint PK_TIPBNO
+            primary key,
+    CHAMPIONNAME VARCHAR2(30),
+    TIPTITLE     VARCHAR2(70)
+        unique,
+    TIPWRITER    NUMBER
+        constraint FK_TIPWRITER
+            references MEMBER
+                on delete cascade,
+    TIPCONTENT   VARCHAR2(2000),
+    TIPDATE      DATE   default SYSDATE,
+    TIPREADCOUNT NUMBER default 0
+)
+/
+
+create table PARTYBOARD
+(
+    PBNO       NUMBER        not null
+        primary key,
+    PBTIMER    NUMBER(3),
+    PBRANKTYPE VARCHAR2(20),
+    PBTIER     VARCHAR2(20),
+    PBPOSITION VARCHAR2(50),
+    PBCONTENT  VARCHAR2(600) not null,
+    PBUSER     VARCHAR2(50)  not null,
+    PBVOICE    CHAR default 'N',
+    PBDATE     DATE default SYSDATE,
+    EPOCH      NUMBER(20)
+)
+/
+
+create table HUMORBOARD
+(
+    HUMORBNO        NUMBER not null
+        primary key,
+    USERNO          NUMBER
+        constraint FK_USERNO
+            references MEMBER
+                on delete cascade,
+    HUMORTITLE      VARCHAR2(50),
+    HUMORWRITER     VARCHAR2(20),
+    HUMORCONTENT    VARCHAR2(2000),
+    HUMORDATE       DATE   default SYSDATE,
+    HUMORBOARDCOUNT NUMBER default 0
+)
+/
+
+create table HCOMMENT
+(
+    CMTNO      NUMBER         not null
+        primary key,
+    HUMORBNO   NUMBER         not null
+        constraint FK_HUMORBNO
+            references HUMORBOARD
+                on delete cascade,
+    USERNO     NUMBER         not null
+        constraint FK_USERNO2
+            references MEMBER
+                on delete cascade,
+    NICKNAME   VARCHAR2(20)   not null,
+    CMTCONTENT VARCHAR2(2000) not null,
+    CMTDATE    DATE default SYSDATE
+)
+/
+
+create table LEAGUEENTRY
+(
+    FRESHBLOOD   VARCHAR2(200),
+    HOTSTREAK    VARCHAR2(200),
+    INACTIVE     VARCHAR2(200),
+    LEAGUEID     VARCHAR2(200),
+    LEAGUEPOINTS NUMBER,
+    LOSSES       NUMBER,
+    WINS         NUMBER,
+    QUEUETYPE    VARCHAR2(200),
+    RANK         VARCHAR2(200),
+    SUMMONERID   VARCHAR2(200),
+    SUMMONERNAME VARCHAR2(200) not null
+        primary key,
+    TIER         VARCHAR2(200),
+    VETERAN      VARCHAR2(200)
+)
+/
+
+create table QUEUETYPE
+(
+    QUEUEID   NUMBER not null
+        primary key,
+    QUEUENAME VARCHAR2(100)
+)
+/
+
+create table POSITIONTYPE
+(
+    POSITION     NUMBER not null
+        primary key,
+    POSITIONNAME VARCHAR2(100)
+)
+/
+

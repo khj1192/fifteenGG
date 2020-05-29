@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+		"-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="partyBoard-mapper">
+
+	<insert id="insertParty" parameterType="PartyBoard">
+		INSERT INTO PARTYBOARD VALUES
+		(SEQ_PB.NEXTVAL,#{pbTimer},#{pbRanktype},#{pbTier},#{pbPosition},#{pbContent},#{pbUser},#{pbVoice},SYSDATE,#{epoch})
+
+	</insert>
+
+	<select id="selectListParty" resultType="PartyBoard">
+		SELECT * FROM PARTYBOARD
+    	ORDER BY PBDATE DESC
+	</select>
+
+
+	<select id="totalCountContent" resultType="int">
+		SELECT COUNT(*) FROM PARTYBOARD
+	</select>
+
+
+	<select id="indexPartyBoardList" resultType="PartyBoard">
+	 <![CDATA[
+      SELECT * FROM(SELECT * FROM PARTYBOARD ORDER BY EPOCH DESC)
+        WHERE ROWNUM <= 4
+   ]]>
+	</select>
+
+	<!-- 검색용 쿼리 -->
+	<select id="searchList" resultType="PartyBoard">
+		SELECT * FROM PARTYBOARD
+		<where>
+			<choose>
+				<when test="pbRanktype != '모든 큐'">
+					PBRANKTYPE = #{pbRanktype}
+				</when>
+				<otherwise>
+					(PBRANKTYPE='솔로랭크' OR PBRANKTYPE='자유랭크'
+					OR PBRANKTYPE='칼바람' OR PBRANKTYPE='일반')
+				</otherwise>
+			</choose>
+
+			<choose>
+				<when test="pbTier != 'ALL'">
+					AND PBTIER = #{pbTier}
+				</when>
+				<otherwise>
+					AND (PBTIER='ALL' OR PBTIER='Unranked'
+					OR PBTIER='IRON' OR PBTIER='BRONZE'
+					OR PBTIER='SILVER' OR PBTIER='GOLD'
+					OR PBTIER='PLATINUM' OR PBTIER='DIAMOND'
+					OR PBTIER='MASTER' OR PBTIER='GRANDMASTER' OR PBTIER='CHALLENGER')
+				</otherwise>
+			</choose>
+
+			<choose>
+				<when test="pbPosition != '포지션 상관 없이 구함'">
+					AND PBPOSITION = #{pbPosition}
+				</when>
+				<otherwise>
+					AND (PBPOSITION='탑 구함' OR PBPOSITION='정글 구함'
+					OR PBPOSITION='미드 구함' OR PBPOSITION='원딜 구함'
+					OR PBPOSITION='서폿 구함' OR PBPOSITION='포지션 상관 없이 구함')
+				</otherwise>
+			</choose>
+
+		</where>
+		ORDER BY PBDATE DESC
+	</select>
+
+	<select id="SelectRcParty" parameterType="string" resultType="PartyBoard">
+		<![CDATA[SELECT PBNO, PBTIMER, PBRANKTYPE, PBTIER, PBPOSITION, PBCONTENT, PBUSER, PBVOICE, PBDATE, EPOCH from (select ROWNUM rn, A.* from ( select * from PARTYBOARD where regexp_like(PBTIER, #{tierInfo} ,'i') order by PBNO desc) A ) where rn < 2
+	]]></select>
+
+
+</mapper>

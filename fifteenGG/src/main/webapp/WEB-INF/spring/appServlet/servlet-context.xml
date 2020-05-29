@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+	
+	<!-- ckeditor -->
+	<resources location="webapp/resources/ckeditor/" mapping="/ckeditor/**"></resources>
+	
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	
+	<!--  파일 업로드를 위한 리졸버 등록하기  -->
+	<!--  멀티파트 리졸버로 저장할 파일의 최대 크기 등을 설정할 수 있다.  -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="10485760"/>
+		<!--  10MB  -->
+	</beans:bean>
+
+	<!-- jackson 객체를 사용하기 위한 설정 등록하기 (ver.2) -->
+	<!--	@ResponseBody 어노테이션을 사용하여 자바 객체를 자동으로 json 형태 변환을 시켜주는 viewResolver	-->
+	<beans:bean id="jacksonMessageConverter"
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+	<beans:bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<beans:property name="messageConverters">
+			<beans:list>
+				<beans:ref bean="jacksonMessageConverter"/>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+<!--	&lt;!&ndash;	aop		&ndash;&gt;-->
+<!--	<aop:config proxy-target-class="true">-->
+<!--		<aop:pointcut id="servicePC" expression="execution(* com.kh.spring..*Service.*(..))"/>-->
+<!--		<aop:advisor id="transactionAdvisor" advice-ref="txAdvice" pointcut-ref="servicePC"/>-->
+<!--	</aop:config>-->
+
+<!--	&lt;!&ndash; Interceptor 타이밍 설정하기 &ndash;&gt;-->
+<!--	<interceptors>-->
+<!--		<interceptor>-->
+<!--			&lt;!&ndash; 모든 경로에서 동작하도록 맵핑 &ndash;&gt;-->
+<!--			<mapping path="/**"/>-->
+<!--			<beans:bean id="loggerInterceptor" class="com.kh.spring.common.interceptor.LoggerInterceptor" />-->
+<!--		</interceptor>-->
+
+<!--		&lt;!&ndash; 회원 로그인 여부 체크 인터셉터 &ndash;&gt;-->
+<!--		<interceptor>-->
+<!--			<mapping path="/member/memberView.do"/>-->
+<!--			<mapping path="/member/memberUpdate.do"/>-->
+<!--			<mapping path="/board/**/*.do"/>-->
+<!--			&lt;!&ndash; 스프링 3.2 버전 이후 부터 exclude 태그를 통해 예외 처리 가능 &ndash;&gt;-->
+<!--			<exclude-mapping path="/board/boardList.do"/>-->
+<!--			<beans:bean id="loginCheckInterceptor" class="com.kh.spring.common.interceptor.LoginCheckInterceptor"/>-->
+<!--		</interceptor>-->
+<!--	</interceptors>-->
+
+<!--	&lt;!&ndash; 어노테이션을 통한 프로그래밍적 AOP 설정 로그인용 &ndash;&gt;-->
+<!--	<aop:aspectj-autoproxy/>-->
+
+	<context:component-scan base-package="com.kh.fifteenGG" />
+
+
+</beans:beans>
+
+
+
+

@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--suppress ALL -->
+<mapper namespace="percentage-mapper">
+<!-- namespace : 현재 매퍼파일의 별칭 -->
+	<!-- 탑 1티어 -->
+	<select id="winPercentTopFive" resultType="Percentage">
+	<![CDATA[
+	SELECT * FROM (
+		SELECT ROWNUM rnum, A.* FROM (SELECT CHAMPNAME , 
+		TRUNC(sum(decode(win, '1', 1, 0))/sum(decode(win, '1', 1, 1))*100,2) as winPercent, POSITION,
+		        sum(decode(win, '1', 1, 1)) as pansoo, TRUNC(sum(decode(win, '1', 1, 1))/(SELECT COUNT(GAMEID)/2 FROM teamstats)*100, 2) as picPercent
+		        , champFullIMG
+		FROM PARTICIPANTSTATS
+		         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+		         JOIN CHAMPION USING (CHAMPIONID)
+		WHERE POSITION = '1'
+		GROUP BY CHAMPNAME ,POSITION , champFullIMG
+		ORDER BY 4 DESC , 2 DESC) A )
+	WHERE RNUM < 6
+	]]>
+	</select>
+	<!-- 탑 2티어 -->
+	<select id="winPercentTopTen" resultType="Percentage">
+	<![CDATA[
+	SELECT * FROM (
+		SELECT ROWNUM rnum, A.* FROM (SELECT CHAMPNAME , 
+		TRUNC(sum(decode(win, '1', 1, 0))/sum(decode(win, '1', 1, 1))*100,2) as winPercent, POSITION,
+		        sum(decode(win, '1', 1, 1)) as pansoo, TRUNC(sum(decode(win, '1', 1, 1))/(SELECT COUNT(GAMEID)/2 FROM teamstats)*100, 2) as picPercent
+		        , CHAMPFULLIMG
+		FROM PARTICIPANTSTATS
+		         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+		         JOIN CHAMPION USING (CHAMPIONID)
+		WHERE POSITION = '1'
+		GROUP BY CHAMPNAME ,POSITION , CHAMPFULLIMG
+		ORDER BY 4 DESC , 2 DESC) A )
+	WHERE RNUM > 5 AND RNUM < 11
+	]]>
+	</select>
+	
+	<!-- 정글 1티어 -->
+	<select id="winPercentJungleFive" resultType="Percentage">
+	<![CDATA[
+	SELECT * FROM (
+		SELECT ROWNUM rnum, A.* FROM (SELECT CHAMPNAME , 
+		TRUNC(sum(decode(win, '1', 1, 0))/sum(decode(win, '1', 1, 1))*100,2) as winPercent, POSITION,
+		        sum(decode(win, '1', 1, 1)) as pansoo, TRUNC(sum(decode(win, '1', 1, 1))/(SELECT COUNT(GAMEID)/2 FROM teamstats)*100, 2) as picPercent
+		        , CHAMPFULLIMG
+		FROM PARTICIPANTSTATS
+		         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+		         JOIN CHAMPION USING (CHAMPIONID)
+		WHERE POSITION = '3'
+		GROUP BY CHAMPNAME ,POSITION , CHAMPFULLIMG
+		ORDER BY 4 DESC , 2 DESC) A )
+	WHERE RNUM < 6
+	]]>
+	</select>
+	
+	<!-- 정글 2티어 -->
+	<select id="winPercentJungleTen" resultType="Percentage">
+	<![CDATA[
+	SELECT * FROM (
+		SELECT ROWNUM rnum, A.* FROM (SELECT CHAMPNAME , 
+		TRUNC(sum(decode(win, '1', 1, 0))/sum(decode(win, '1', 1, 1))*100,2) as winPercent, POSITION,
+		        sum(decode(win, '1', 1, 1)) as pansoo, TRUNC(sum(decode(win, '1', 1, 1))/(SELECT COUNT(GAMEID)/2 FROM teamstats)*100, 2) as picPercent
+		        , CHAMPFULLIMG
+		FROM PARTICIPANTSTATS
+		         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+		         JOIN CHAMPION USING (CHAMPIONID)
+		WHERE POSITION = '3'
+		GROUP BY CHAMPNAME ,POSITION , CHAMPFULLIMG
+		ORDER BY 4 DESC , 2 DESC) A )
+	WHERE RNUM > 5 AND RNUM < 11
+	]]>
+	</select>
+	
+		<!-- 미드 1티어 -->
+	<select id="winPercentMidFive" resultType="Percentage">
+	<![CDATA[
+	SELECT * FROM (
+		SELECT ROWNUM rnum, A.* FROM (SELECT CHAMPNAME , 
+		TRUNC(sum(decode(win, '1', 1, 0))/sum(decode(win, '1', 1, 1))*100,2) as winPercent, POSITION,
+		        sum(decode(win, '1', 1, 1)) as pansoo, TRUNC(sum(decode(win, '1', 1, 1))/(SELECT COUNT(GAMEID)/2 FROM teamstats)*100, 2) as picPercent
+		        , CHAMPFULLIMG
+		FROM PARTICIPANTSTATS
+		         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+		         JOIN CHAMPION USING (CHAMPIONID)
+		WHERE POSITION = '2'
+		GROUP BY CHAMPNAME ,POSITION , CHAMPFULLIMG
+		ORDER BY 4 DESC , 2 DESC) A )
+	WHERE RNUM < 6
+	]]>
+	</select>
+	
+	<!-- 미드 2티어 -->
+	<select id="winPercentMidTen" resultType="Percentage">
+	<![CDATA[
+	SELECT * FROM (
+		SELECT ROWNUM rnum, A.* FROM (SELECT CHAMPNAME , 
+		TRUNC(sum(decode(win, '1', 1, 0))/sum(decode(win, '1', 1, 1))*100,2) as winPercent, POSITION,
+		        sum(decode(win, '1', 1, 1)) as pansoo, TRUNC(sum(decode(win, '1', 1, 1))/(SELECT COUNT(GAMEID)/2 FROM teamstats)*100, 2) as picPercent
+		        , CHAMPFULLIMG
+		FROM PARTICIPANTSTATS
+		         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+		         JOIN CHAMPION USING (CHAMPIONID)
+		WHERE POSITION = '2'
+		GROUP BY CHAMPNAME ,POSITION , CHAMPFULLIMG
+		ORDER BY 4 DESC , 2 DESC) A )
+	WHERE RNUM > 5 AND RNUM < 11
+	]]>
+	</select>
+	
+	<!-- 원딜 1티어 -->
+	<select id="winPercentAdcFive" resultType="Percentage">
+	<![CDATA[
+	SELECT * FROM (
+		SELECT ROWNUM rnum, A.* FROM (SELECT CHAMPNAME , 
+		TRUNC(sum(decode(win, '1', 1, 0))/sum(decode(win, '1', 1, 1))*100,2) as winPercent, POSITION,
+		        sum(decode(win, '1', 1, 1)) as pansoo, TRUNC(sum(decode(win, '1', 1, 1))/(SELECT COUNT(GAMEID)/2 FROM teamstats)*100, 2) as picPercent
+		        , CHAMPFULLIMG
+		FROM PARTICIPANTSTATS
+		         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+		         JOIN CHAMPION USING (CHAMPIONID)
+		WHERE POSITION = '4'
+		GROUP BY CHAMPNAME ,POSITION , CHAMPFULLIMG
+		ORDER BY 4 DESC , 2 DESC) A )
+	WHERE RNUM < 6
+	]]>
+	</select>
+	
+	<!-- 원딜 2티어 -->
+	<select id="winPercentAdcTen" resultType="Percentage">
+	<![CDATA[
+	SELECT * FROM (
+		SELECT ROWNUM rnum, A.* FROM (SELECT CHAMPNAME , 
+		TRUNC(sum(decode(win, '1', 1, 0))/sum(decode(win, '1', 1, 1))*100,2) as winPercent, POSITION,
+		        sum(decode(win, '1', 1, 1)) as pansoo, TRUNC(sum(decode(win, '1', 1, 1))/(SELECT COUNT(GAMEID)/2 FROM teamstats)*100, 2) as picPercent
+		        , CHAMPFULLIMG
+		FROM PARTICIPANTSTATS
+		         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+		         JOIN CHAMPION USING (CHAMPIONID)
+		WHERE POSITION = '4'
+		GROUP BY CHAMPNAME ,POSITION , CHAMPFULLIMG
+		ORDER BY 4 DESC , 2 DESC) A )
+	WHERE RNUM > 5 AND RNUM < 11
+	]]>
+	</select>
+	
+	<!-- 서포터 1티어 -->
+	<select id="winPercentSupportFive" resultType="Percentage">
+	<![CDATA[
+	SELECT * FROM (
+		SELECT ROWNUM rnum, A.* FROM (SELECT CHAMPNAME , 
+		TRUNC(sum(decode(win, '1', 1, 0))/sum(decode(win, '1', 1, 1))*100,2) as winPercent, POSITION,
+		        sum(decode(win, '1', 1, 1)) as pansoo, TRUNC(sum(decode(win, '1', 1, 1))/(SELECT COUNT(GAMEID)/2 FROM teamstats)*100, 2) as picPercent
+		        , CHAMPFULLIMG
+		FROM PARTICIPANTSTATS
+		         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+		         JOIN CHAMPION USING (CHAMPIONID)
+		WHERE POSITION = '5'
+		GROUP BY CHAMPNAME ,POSITION , CHAMPFULLIMG
+		ORDER BY 4 DESC , 2 DESC) A )
+	WHERE RNUM < 6
+	]]>
+	</select>
+	
+	<!-- 서포터 2티어 -->
+	<select id="winPercentSupportTen" resultType="Percentage">
+	<![CDATA[
+	SELECT * FROM (
+		SELECT ROWNUM rnum, A.* FROM (SELECT CHAMPNAME , 
+		TRUNC(sum(decode(win, '1', 1, 0))/sum(decode(win, '1', 1, 1))*100,2) as winPercent, POSITION,
+		        sum(decode(win, '1', 1, 1)) as pansoo, TRUNC(sum(decode(win, '1', 1, 1))/(SELECT COUNT(GAMEID)/2 FROM teamstats)*100, 2) as picPercent
+		        , CHAMPFULLIMG
+		FROM PARTICIPANTSTATS
+		         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+		         JOIN CHAMPION USING (CHAMPIONID)
+		WHERE POSITION = '5'
+		GROUP BY CHAMPNAME ,POSITION , CHAMPFULLIMG
+		ORDER BY 4 DESC , 2 DESC) A )
+	WHERE RNUM > 5 AND RNUM < 11
+	]]>
+	</select>
+	
+	
+<select resultType="Percentage" id="supportAll">
+
+<![CDATA[
+			SELECT * FROM (
+		SELECT ROWNUM rnum, A.* FROM (SELECT CHAMPNAME , 
+		TRUNC(sum(decode(win, '1', 1, 0))/sum(decode(win, '1', 1, 1))*100,2) as winPercent, POSITION,
+		        sum(decode(win, '1', 1, 1)) as pansoo, TRUNC(sum(decode(win, '1', 1, 1))/(SELECT COUNT(GAMEID)/2 FROM teamstats)*100, 2) as picPercent
+		        , CHAMPFULLIMG
+		FROM PARTICIPANTSTATS
+		         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+		         JOIN CHAMPION USING (CHAMPIONID)
+		WHERE POSITION = '5'
+		GROUP BY CHAMPNAME ,POSITION , CHAMPFULLIMG
+		ORDER BY 4 DESC , 2 DESC) A )
+	WHERE RNUM < 31
+	ORDER BY 2
+	]]>
+</select>
+
+
+<select resultType="Percentage" id="adcAll">
+
+<![CDATA[
+			SELECT * FROM (
+		SELECT ROWNUM rnum, A.* FROM (SELECT CHAMPNAME , 
+		TRUNC(sum(decode(win, '1', 1, 0))/sum(decode(win, '1', 1, 1))*100,2) as winPercent, POSITION,
+		        sum(decode(win, '1', 1, 1)) as pansoo, TRUNC(sum(decode(win, '1', 1, 1))/(SELECT COUNT(GAMEID)/2 FROM teamstats)*100, 2) as picPercent
+		        , CHAMPFULLIMG
+		FROM PARTICIPANTSTATS
+		         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+		         JOIN CHAMPION USING (CHAMPIONID)
+		WHERE POSITION = '4'
+		GROUP BY CHAMPNAME ,POSITION , CHAMPFULLIMG
+		ORDER BY 4 DESC , 2 DESC) A )
+		WHERE RNUM < 26
+		ORDER BY 2
+		]]>
+</select>
+
+
+<select resultType="Percentage" id="midAll">
+
+<![CDATA[
+			SELECT * FROM (
+		SELECT ROWNUM rnum, A.* FROM (SELECT CHAMPNAME , 
+		TRUNC(sum(decode(win, '1', 1, 0))/sum(decode(win, '1', 1, 1))*100,2) as winPercent, POSITION,
+		        sum(decode(win, '1', 1, 1)) as pansoo, TRUNC(sum(decode(win, '1', 1, 1))/(SELECT COUNT(GAMEID)/2 FROM teamstats)*100, 2) as picPercent
+		        , CHAMPFULLIMG
+		FROM PARTICIPANTSTATS
+		         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+		         JOIN CHAMPION USING (CHAMPIONID)
+		WHERE POSITION = '2'
+		GROUP BY CHAMPNAME ,POSITION , CHAMPFULLIMG
+		ORDER BY 4 DESC , 2 DESC) A )
+		WHERE RNUM < 58
+		ORDER BY 2
+		]]>
+</select>
+
+
+<select resultType="Percentage" id="topAll">
+
+<![CDATA[
+			SELECT * FROM (
+		SELECT ROWNUM rnum, A.* FROM (SELECT CHAMPNAME , 
+		TRUNC(sum(decode(win, '1', 1, 0))/sum(decode(win, '1', 1, 1))*100,2) as winPercent, POSITION,
+		        sum(decode(win, '1', 1, 1)) as pansoo, TRUNC(sum(decode(win, '1', 1, 1))/(SELECT COUNT(GAMEID)/2 FROM teamstats)*100, 2) as picPercent
+		        , CHAMPFULLIMG
+		FROM PARTICIPANTSTATS
+		         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+		         JOIN CHAMPION USING (CHAMPIONID)
+		WHERE POSITION = '1'
+		GROUP BY CHAMPNAME ,POSITION , CHAMPFULLIMG
+		ORDER BY 4 DESC , 2 DESC) A )
+		WHERE RNUM < 61
+		ORDER BY 2
+		]]>
+</select>
+
+
+<select resultType="Percentage" id="jungleAll">
+
+<![CDATA[
+			SELECT * FROM (
+		SELECT ROWNUM rnum, A.* FROM (SELECT CHAMPNAME , 
+		TRUNC(sum(decode(win, '1', 1, 0))/sum(decode(win, '1', 1, 1))*100,2) as winPercent, POSITION,
+		        sum(decode(win, '1', 1, 1)) as pansoo, TRUNC(sum(decode(win, '1', 1, 1))/(SELECT COUNT(GAMEID)/2 FROM teamstats)*100, 2) as picPercent
+		        , CHAMPFULLIMG
+		FROM PARTICIPANTSTATS
+		         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+		         JOIN CHAMPION USING (CHAMPIONID)
+		WHERE POSITION = '3'
+		GROUP BY CHAMPNAME ,POSITION , CHAMPFULLIMG
+		ORDER BY 4 DESC , 2 DESC) A )
+		WHERE RNUM < 52
+		ORDER BY 2
+		]]>
+</select>
+	
+<select resultType="Percentage" id="champAll">
+
+		SELECT * FROM CHAMPION
+        ORDER BY 2
+
+</select>
+</mapper>

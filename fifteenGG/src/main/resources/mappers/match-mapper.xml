@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--suppress ALL -->
+<mapper namespace="match-mapper">
+    <!-- namespace : 현재 매퍼파일의 별칭 -->
+
+    <!--	LeagueEntry 저장용 -->
+    <insert id="insertLeagueEntry" parameterType="LeagueEntry">
+		insert into LEAGUEENTRY values (
+		#{freshBlood}, #{hotStreak}, #{inactive}, #{leagueId}, #{leaguePoints}
+		, #{losses}, #{wins}, #{queueType}, #{rank}, #{summonerId}
+		, #{summonerName}, #{tier}, #{veteran})
+	</insert>
+    <!--	LeagueEntry 삭제용 -->
+    <insert id="deleteLeagueEntry" parameterType="string">
+		delete from LEAGUEENTRY where summonerName = #{summonerName}
+	</insert>
+
+
+    <!--	매치 정보 저장용	-->
+    <insert id="insertMatch" parameterType="Match">
+		insert into MATCH values (
+			#{gameCreation}, #{gameDuration}, #{gameId}, #{gameMode}
+			, #{gameType}, #{gameVersion}, #{mapId}, #{platformId}, #{queueId}, #{seasonId})
+	</insert>
+
+    <insert id="insertTeamStats" parameterType="TeamStats">
+		insert into TEAMSTATS values (
+		#{gameId}, #{baronKills}, #{dominionVictoryScore}, #{dragonKills}, #{firstBaron}
+		, #{firstBlood}, #{firstDragon}, #{firstInhibitor}, #{firstRiftHerald}, #{firstTower}
+		, #{inhibitorKills}, #{riftHeraldKills}, #{teamId}, #{towerKills}, #{vilemawKills}
+		, #{win})
+	</insert>
+
+    <insert id="insertTeamBans" parameterType="TeamBans">
+		insert into TEAMBANS values (
+		#{gameId}, #{teamId}, #{championId}, #{pickTurn})
+	</insert>
+
+    <insert id="insertParticipantIdentity" parameterType="ParticipantIdentity">
+		insert into PARTICIPANTIDENTITY values (
+		#{gameId}, #{participantId}
+		)
+	</insert>
+
+    <insert id="insertPlayer" parameterType="Player">
+		insert into PLAYER values (
+		#{gameId}, #{participantId}, #{accountId}, #{currentPlatformId}, #{currentPlatformId}
+		, #{matchHistoryUri}, #{platformId}, #{profileIcon}, #{summonerId}, #{summonerName}
+		)
+	</insert>
+
+    <insert id="insertParticipant" parameterType="Participant">
+		insert into PATICIPANT values (
+			#{gameId}, #{championId}, #{participantId}, #{spell1Id}, #{spell2Id}
+			, #{teamId}
+		)
+	</insert>
+
+    <insert id="insertParticipantStats" parameterType="ParticipantStats">
+		insert into PARTICIPANTSTATS values (
+			#{gameId}, #{altarsCaptured}, #{altarsNeutralized}, #{assists}, #{champLevel}
+			, #{combatPlayerScore}, #{damageDealtToObjectives}, #{damageDealtToTurrets}, #{damageSelfMitigated}, #{deaths}
+			, #{doubleKills}, #{firstBloodAssist}, #{firstBloodKill}, #{firstInhibitorAssist}, #{firstInhibitorKill}
+			, #{firstTowerAssist}, #{firstTowerKill}, #{goldEarned}, #{goldSpent}, #{inhibitorKills}
+			, #{item0}, #{item1}, #{item2}, #{item3}, #{item4}
+			, #{item5}, #{item6}, #{killingSprees}, #{kills}, #{largestCriticalStrike}
+			, #{largestKillingSpree}, #{largestMultiKill}, #{longestTimeSpentLiving}, #{magicDamageDealt}, #{magicDamageDealtToChampions}
+			, #{magicalDamageTaken}, #{neutralMinionsKilled}, #{neutralMinionsKilledEnemyJungle}, #{neutralMinionsKilledTeamJungle}, #{nodeCapture}
+			, #{nodeCaptureAssist}, #{nodeNeutralize}, #{nodeNeutralizeAssist}, #{objectivePlayerScore}, #{participantId}
+			, #{pentaKills}, #{physicalDamageDealt}, #{physicalDamageDealtToChampions}, #{physicalDamageTaken}, #{quadraKills}
+			, #{sightWardsBoughtInGame}, #{teamObjective}, #{timeCCingOthers}, #{totalDamageDealt}, #{totalDamageDealtToChampions}
+			, #{totalDamageTaken}, #{totalHeal}, #{totalMinionsKilled}, #{totalPlayerScore}, #{totalScoreRank}
+			, #{totalTimeCrowdControlDealt}, #{totalUnitsHealed}, #{tripleKills}, #{trueDamageDealt}, #{trueDamageDealtToChampions}
+			, #{trueDamageTaken}, #{turretKills}, #{unrealKills}, #{visionScore}, #{visionWardsBoughtInGame}
+			, #{wardsKilled}, #{wardsPlaced}, #{win}, #{perk0}, #{perk1}
+			, #{perk2}, #{perk3}, #{perk4}, #{perk5}, #{perk0Var1}
+			, #{perk0Var2}, #{perk0Var3}, #{perk1Var1}, #{perk1Var2}, #{perk1Var3}
+			, #{perk2Var1}, #{perk2Var2}, #{perk2Var3}, #{perk3Var1}, #{perk3Var2}
+			, #{perk3Var3}, #{perk4Var1}, #{perk4Var2}, #{perk4Var3}, #{perk5Var1}
+			, #{perk5Var2}, #{perk5Var3}, #{playerScore0}, #{playerScore1}, #{playerScore2}
+			, #{playerScore3}, #{playerScore4}, #{playerScore5}, #{playerScore6}, #{playerScore7}
+			, #{playerScore8}, #{playerScore9}, #{perkPrimaryStyle}, #{perkSubStyle}, #{statPerk0}
+			, #{statPerk1}, #{statPerk2}, #{position}
+		)
+	</insert>
+
+    <insert id="insertParticipantTimeline" parameterType="ParticipantTimeline">
+		insert into PARTICIPANTTIMELINE values (
+			#{gameId}, #{lane}, #{participantId}, #{role}
+		)
+	</insert>
+
+    <select id="checkMatch" parameterType="hashmap" statementType="CALLABLE">
+		{ CALL MATCH_DUP_CHECK(#{gameId, mode=IN, jdbcType=VARCHAR}, #{result, mode=OUT, jdbcType=NUMERIC, javaType=integer})}
+	</select>
+
+    <insert id="insertMatchReference" parameterType="MatchReference">
+		insert into MATCHREFERENCE values (
+		#{champion}, #{gameId}, #{lane}, #{platformId}, #{queue}
+		, #{role}, #{season}, #{timestamp})
+	</insert>
+
+    <insert id="insertTimeLine" parameterType="MatchPosition">
+		insert into MATCHPOSITION values (
+		#{gameId}, #{timestamp}, #{participantId}, #{x}, #{y})
+	</insert>
+
+    <!--	매치 정보 저장용 끝		-->
+
+
+    <!-- ========================================================================================================= -->
+
+    <!--	검색 화면 조회용 쿼리 시작 -->
+
+    <!-- 매치리스트 게임아이디 뽑아오기 페이징 추가	-->
+    <select id="selectMatchList" parameterType="hashmap" resultType="string">
+<![CDATA[
+		SELECT GAMEID
+			FROM (
+				 SELECT ROWNUM RN, A.*
+				 FROM (
+					  select DISTINCT GAMEID
+					  from MATCH
+							   join PLAYER using (GAMEID)
+					  where upper(replace(SUMMONERNAME, ' ', '')) = upper(replace(#{summonerName}, ' ', ''))
+					  order by GAMEID desc
+				  ) A
+			 )
+		WHERE RN <= #{endPage}
+	]]></select>
+
+    <!--	매치 조회용	-->
+    <select id="selectTeam" parameterType="string" resultType="TeamView">
+		select SUMMONERNAME, POSITION, CHAMPIONID, CHAMPname, ChampFullImg, S1.SPELLNAME as spell1Id, S2.SPELLNAME as spell2Id, TEAMID, ITEM0, ITEM1, ITEM2, ITEM3, ITEM4, ITEM5, ITEM6, KILLS, DEATHS, ASSISTS, trunc(((TOTALMINIONSKILLED + NEUTRAKMINIONSKILLED)/GAMEDURATION*60),1) as totalMinionKilled, WIN, PERK0, PERKSUBSTYLE, GAMEDURATION, GAMECREATION, QUEUENAME
+		from PATICIPANT S
+		join PARTICIPANTSTATS using (GAMEID, PARTICIPANTID)
+		join PARTICIPANTIDENTITY using (GAMEID, PARTICIPANTID)
+		join PLAYER using (GAMEID, PARTICIPANTID)
+		join PARTICIPANTTIMELINE using (GAMEID, PARTICIPANTID)
+		join MATCH using (GAMEID)
+		join CHAMPION using (CHAMPIONID)
+		join SUMMONERSPELL S1 on S.SPELL1ID = S1.SPELLNO
+		join SUMMONERSPELL S2 on S.SPELL2ID = S2.SPELLNO
+		join QUEUETYPE using (QUEUEID)
+		where GAMEID = #{gameid}
+		order by TEAMID, GAMEID desc, POSITION
+	</select>
+
+    <!-- 최근 10경기 스탯  -->
+    <select id="selectMyStat" parameterType="string" resultType="MatchKDA">
+	<![CDATA[
+			SELECT GAMEID,SUMMONERNAME, TRUNC((KILLS+ASSISTS)/DECODE(DEATHS,'0',0.1,DEATHS),2) AS KDA,
+			(TOTALMINIONSKILLED+NEUTRAKMINIONSKILLED) AS CS ,GAMEDURATION, WIN
+		FROM (
+			 SELECT ROWNUM RN, A.*
+			 FROM (
+				  select DISTINCT GAMEID,SUMMONERNAME,KILLS,ASSISTS,DEATHS,TOTALMINIONSKILLED,NEUTRAKMINIONSKILLED ,GAMEDURATION , WIN
+				  from MATCH
+					   join PARTICIPANTSTATS using (GAMEID)
+					   join PLAYER using (PLATFORMID, GAMEID, PARTICIPANTID)
+				  where upper(replace(SUMMONERNAME, ' ', '')) = upper(replace(#{summonerName}, ' ', ''))
+				  order by GAMEID desc
+			  ) A
+		 )
+		 WHERE RN < 11
+
+
+        ]]>
+	</select>
+
+    <!-- 모스트 챔프 -->
+    <select id="selectMostChamp" parameterType="String" resultType="hashmap">
+	<![CDATA[
+				select * from
+		(
+			select ROWNUM rn, A.*
+			from
+				(select CHAMPNAME, CHAMPFULLIMG, count(*) as totalCount, sum(WIN) as win,
+						sum(decode(win, '0', 1, '1', 0)) as lose,
+						trunc((avg(KILLS + ASSISTS) / avg(decode(DEATHS,0,null,DEATHS))), 1) as kda,
+						trunc((sum(win)/count(*)),2) as rate
+				 from PARTICIPANTSTATS
+						  join PATICIPANT using (GAMEID, PARTICIPANTID)
+						  join PLAYER using (GAMEID, PARTICIPANTID)
+						  join CHAMPION using (CHAMPIONID)
+				 where upper(replace(SUMMONERNAME, ' ', '')) = upper(replace(#{summonerName}, ' ', ''))
+				and DEATHS != 0
+				 group by CHAMPNAME, CHAMPFULLIMG order by totalCount desc) A
+		)
+	where rn < 4
+
+	]]>
+	</select>
+
+    <select id="selectMostQueueId" parameterType="String" resultType="hashmap">
+    	select QUEUEID, count(*) as queuecount, QUEUENAME
+        from MATCH
+                 join PLAYER using (GAMEID)
+                 join PARTICIPANTSTATS using (GAMEID, PARTICIPANTID)
+                 join PATICIPANT using (GAMEID, PARTICIPANTID)
+                join QUEUETYPE using (QUEUEID)
+        where upper(replace(SUMMONERNAME, ' ', '')) = upper(replace(#{summonerName}, ' ', ''))
+        group by QUEUEID, QUEUENAME
+        order by queuecount desc
+	</select>
+
+    <select id="selectMostPosition" parameterType="string" resultType="hashmap">
+		<![CDATA[
+
+                select POSITION, positioncount, positionName
+                from (
+                select ROWNUM rn, A.*
+                from (
+                select POSITION, count(*) as positioncount, positionName
+                from MATCH
+                join PLAYER using (GAMEID)
+                join PARTICIPANTSTATS using (GAMEID, PARTICIPANTID)
+                join PATICIPANT using (GAMEID, PARTICIPANTID)
+                join positionType using (POSITION)
+                where upper(replace(SUMMONERNAME, ' ', '')) = upper(replace(#{summonerName}, ' ', ''))
+                group by POSITION, positionName
+                order by positioncount desc
+                ) A
+                )
+                where rn < 4
+
+        ]]>
+	</select>
+</mapper>

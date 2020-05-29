@@ -1,0 +1,28 @@
+.fcy-54fyyd {
+    -webkit-appearance: none;
+    -webkit-box-align: center;
+    align-items: center;
+    bottom: 0px;
+    display: block;
+    height: 60px;
+    -webkit-box-pack: center;
+    justify-content: center;
+    line-height: 60px;
+    position: relative;
+    user-select: none;
+    z-index: 999;
+    background-color: rgb(29, 46, 81);
+    color: white;
+    cursor: pointer;
+    min-width: 60px;
+    -webkit-tap-highlight-color: transparent;
+    border-radius: 200px;
+    margin: 0px;
+    outline: none;
+    padding: 0px;
+    border-width: initial;
+    border-style: none;
+    border-color: initial;
+    border-image: initial;
+    transition: background-color 200ms linear 0s, transform 200ms linear 0s;
+}

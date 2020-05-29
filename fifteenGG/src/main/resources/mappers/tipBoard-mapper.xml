@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--suppress ALL -->
+<mapper namespace="tipBoard-mapper">
+<!-- namespace : 현재 매퍼파일의 별칭 -->
+	<insert id="insertTipBoard" parameterType="TipBoard">
+		INSERT INTO TIPBOARD 
+		VALUES(SEQ_TIPBNO.NEXTVAL, #{championName}, #{tipTitle}, #{tipWriter},
+		 #{tipContent}, DEFAULT, DEFAULT)
+	</insert>
+	
+	<select id="selectList" parameterType="string" resultType="TipBoard">
+		SELECT T.* , M.NICKNAME NICKNAME
+		FROM TIPBOARD T
+		JOIN MEMBER M ON(T.TIPWRITER = M.USERNO)
+		WHERE CHAMPIONNAME = #{championName}
+		ORDER BY TIPDATE DESC
+	</select>
+	
+	<select id="selectTotalContents" parameterType="string" resultType="int" >
+		SELECT COUNT(*) FROM TIPBOARD WHERE CHAMPIONNAME = #{championName}
+
+	</select>
+	
+	<select id="selectMainList" parameterType="string" resultType="TipBoard">
+		SELECT T.* , M.NICKNAME NICKNAME
+		FROM TIPBOARD T
+		JOIN MEMBER M ON(T.TIPWRITER = M.USERNO)
+		WHERE CHAMPIONNAME = #{championName}
+		ORDER BY TIPDATE DESC
+	</select>
+	
+	<select id="selectTotalMainContents" parameterType="string" resultType="int" >
+		SELECT COUNT(*) FROM TIPBOARD WHERE CHAMPIONNAME = #{championName}
+
+	</select>
+	
+	<select id="selectTipBoardView" parameterType="_int" resultType="TipBoard">
+		SELECT T.* , M.NICKNAME NICKNAME
+		FROM TIPBOARD T
+		JOIN MEMBER M ON(T.TIPWRITER = M.USERNO)
+		WHERE TIPBNO = #{tipBno}
+		
+	</select>
+	
+	<delete id="deleteTipBoard" parameterType="int">
+		DELETE FROM TIPBOARD WHERE TIPBNO = #{tipBno}
+	</delete>
+	
+	<update id="readCount" parameterType="int">
+			UPDATE TIPBOARD
+			SET TIPREADCOUNT = TIPREADCOUNT +1
+			WHERE TIPBNO = #{tipBno}
+	</update>
+</mapper>

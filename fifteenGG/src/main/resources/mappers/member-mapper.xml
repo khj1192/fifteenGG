@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--suppress ALL -->
+<mapper namespace="member-mapper">
+<!-- namespace : 현재 매퍼파일의 별칭 -->
+
+ <insert id="insertMember" parameterType="Member">
+        insert into member
+       values (SEQ_MEM.NEXTVAL, #{email}, #{nickName}, #{password})
+ </insert>
+
+    <select id="selectOneMember" parameterType="Member" resultType="Member">
+        select * from MEMBER
+        where EMAIL = #{email}
+    </select>
+
+	<delete id="deleteMember" parameterType="Member">
+        delete from MEMBER
+        where EMAIL = #{email}
+    </delete>
+ 
+	<update id="updateMember" parameterType="Member">
+		UPDATE MEMBER 
+		<set>
+			<if test="nickName != null">
+				NICKNAME = #{nickName},
+			</if>
+			<if test="password != null">
+				PASSWORD = #{password}
+			</if>
+		</set>
+		WHERE EMAIL = #{email}
+		</update>
+
+<!--    <select id="memberView" parameterType="String" resultType="Member">-->
+<!--        select *-->
+<!--        from MEMBER-->
+<!--        where USERID = #{userId}-->
+<!--    </select>-->
+
+<!--    <select id="checkIdDuplicate" parameterType="hashmap" statementType="CALLABLE">-->
+<!--        &lt;!&ndash; CALLABLE statement 일반 statement, Prepeardstatement 와는 다르게 프로지져 (PL/SQL)을-->
+<!--        호출하는 전용 실행 문법이다. &ndash;&gt;-->
+<!--        &lt;!&ndash; CALLABLEstatement 는 {} 로 묶어 실행하며, 시작 괄호 '{' 다음에 Tab을 사용할 경우 값을 읽지 못한다. &ndash;&gt;-->
+<!--        { CALL ID_DUP_CHECK(#{userId, mode=IN, jdbcType=VARCHAR}, #{result, mode=OUT, jdbcType=NUMERIC, javaType=integer})}-->
+
+<!--    </select>-->
+		 <select id="checkIdDuplicate" parameterType="hashmap" statementType="CALLABLE">
+	 		{ CALL NK_DUP_CHECK(#{nickName, mode=IN, jdbcType=VARCHAR},
+	 						  #{result, mode=OUT, jdbcType=NUMERIC, javaType=integer})}
+		</select>
+
+</mapper>

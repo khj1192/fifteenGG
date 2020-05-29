@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE configuration PUBLIC
+"-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<!-- 마이바티스 설정과 관련된 태그 -->
+	<settings>
+		<!-- 만약에 Null 값이 들어온다면 DB에서도
+		    Null 이라고 받아라! -->
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
+	
+	<!-- 마이바티스에서 사용하기 위한 
+	    VO 클래스의 별칭을 정의하는 태그 -->
+	<typeAliases>
+<!--		 sql에서 사용할 때 직접 내용을 적지 않고 별칭으로도 접근이 가능하다.-->
+
+		<!-- 회원용 -->
+		<typeAlias type="com.kh.fifteenGG.member.model.vo.Member"
+			         alias="Member"/>
+		<!-- match 용 -->
+		<typeAlias type="com.kh.fifteenGG.search.model.vo.league.LeagueEntry"
+				   alias="LeagueEntry"/>
+		<typeAlias type="com.kh.fifteenGG.search.model.vo.match.Match"
+				   alias="Match"/>
+		<typeAlias type="com.kh.fifteenGG.search.model.vo.match.TeamStats"
+				   alias="TeamStats"/>
+		<typeAlias type="com.kh.fifteenGG.search.model.vo.match.TeamBans"
+				   alias="TeamBans"/>
+		<typeAlias type="com.kh.fifteenGG.search.model.vo.match.ParticipantIdentity"
+				   alias="ParticipantIdentity"/>
+		<typeAlias type="com.kh.fifteenGG.search.model.vo.match.Player"
+				   alias="Player"/>
+		<typeAlias type="com.kh.fifteenGG.search.model.vo.match.Participant"
+				   alias="Participant"/>
+		<typeAlias type="com.kh.fifteenGG.search.model.vo.match.ParticipantStats"
+				   alias="ParticipantStats"/>
+		<typeAlias type="com.kh.fifteenGG.search.model.vo.match.ParticipantTimeline"
+				   alias="ParticipantTimeline"/>
+		<typeAlias type="com.kh.fifteenGG.search.model.vo.match.MatchReference"
+				   alias="MatchReference"/>
+		<typeAlias type="com.kh.fifteenGG.search.model.vo.match.MatchPosition"
+				   alias="MatchPosition"/>
+		<typeAlias type="com.kh.fifteenGG.search.model.vo.view.TeamView"
+				   alias="TeamView"/>
+		<typeAlias type="com.kh.fifteenGG.search.model.vo.view.MatchKDA"
+				   alias="MatchKDA"/>
+
+		<!-- 팁 게시판 -->
+		<typeAlias type="com.kh.fifteenGG.champion.model.vo.TipBoard"
+				   alias="TipBoard"/>
+		<typeAlias type="com.kh.fifteenGG.champion.model.vo.Percentage" alias="Percentage"/>
+		<typeAlias type="com.kh.fifteenGG.champion.model.vo.ChampionSpellRC" alias="ChampionSpellRC"/>
+		<typeAlias type="com.kh.fifteenGG.champion.model.vo.ChampionRunRC" alias="ChampionRunRC"/>
+		<!-- 파티 게시판 -->
+		<typeAlias type="com.kh.fifteenGG.partyBoard.model.vo.PartyBoard"
+				   alias="PartyBoard"/>
+		<typeAlias type="com.kh.fifteenGG.humorBoard.model.vo.humorBoard" alias="humorBoard"/>
+		<typeAlias type="com.kh.fifteenGG.humorBoard.model.vo.Comment" alias="Comment"/>
+		<typeAlias alias="ObjectPercentage" type="com.kh.fifteenGG.statisticsBoard.model.vo.ObjectPercentage"/>
+		<typeAlias alias="DataTablePackageBoard" type="com.kh.fifteenGG.statisticsBoard.model.vo.DataTablePackageBoard"/>
+	</typeAliases>
+
+</configuration>
+
+
+
+
+
+
+
+
+
+

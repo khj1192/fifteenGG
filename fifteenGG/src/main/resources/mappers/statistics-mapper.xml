@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="statistics-mapper">
+
+    <select id="objectWinPercentage" resultType="ObjectPercentage">
+   SELECT DISTINCT  TRUNC((SELECT COUNT(TEAMID)
+                FROM TEAMSTATS
+                WHERE TEAMID='100' AND WIN='Win' AND FIRSTBLOOD = 1)/
+                    (SELECT COUNT(TEAMID)
+                     FROM TEAMSTATS
+                     WHERE TEAMID='100' AND FIRSTBLOOD = 1), 4)*100 AS BFBWPERCENT,
+                         TRUNC((SELECT COUNT(TEAMID)
+                                FROM TEAMSTATS
+                                WHERE TEAMID='200' AND WIN='Win' AND FIRSTBLOOD = 1)/
+                                (SELECT COUNT(TEAMID)
+                                 FROM TEAMSTATS
+                                WHERE TEAMID='200' AND FIRSTBLOOD = 1), 4)*100 AS RFBWPERCENT,
+                TRUNC ((SELECT COUNT(*) 
+                        FROM TEAMSTATS 
+                        WHERE FIRSTDRAGON=1 AND WIN='Win')/(SELECT COUNT(*) FROM TEAMSTATS 
+                        WHERE FIRSTDRAGON= 1),4)*100 AS "firstBloodDragonWinPercent" ,
+                TRUNC ((SELECT COUNT(*) FROM TEAMSTATS WHERE DRAGONKILLS=0 AND WIN='Win')/(SELECT COUNT(*) FROM TEAMSTATS WHERE DRAGONKILLS= 0),4)*100 AS "zeroDragonWinPercent",
+                TRUNC ((SELECT COUNT(*) FROM TEAMSTATS WHERE DRAGONKILLS=1 AND WIN='Win')/(SELECT COUNT(*) FROM TEAMSTATS WHERE DRAGONKILLS= 1),4)*100 AS "oneDragonWinPercent",
+                TRUNC ((SELECT COUNT(*) FROM TEAMSTATS WHERE DRAGONKILLS=2 AND WIN='Win')/(SELECT COUNT(*) FROM TEAMSTATS WHERE DRAGONKILLS= 2),4)*100 AS "twoDragonWinPercent",
+                TRUNC ((SELECT COUNT(*) FROM TEAMSTATS WHERE DRAGONKILLS=3 AND WIN='Win')/(SELECT COUNT(*) FROM TEAMSTATS WHERE DRAGONKILLS= 3),4)*100 AS "threeDragonWinPercent",
+                TRUNC ((SELECT COUNT(*) FROM TEAMSTATS WHERE DRAGONKILLS=4 AND WIN='Win')/(SELECT COUNT(*) FROM TEAMSTATS WHERE DRAGONKILLS= 4),4)*100 AS "fourDragonWinPercent",
+                TRUNC ((SELECT COUNT(*) 
+                        FROM TEAMSTATS 
+                        WHERE FIRSTBARON=1 AND WIN='Win')/(SELECT COUNT(*) FROM TEAMSTATS 
+                        WHERE FIRSTBARON= 1),4)*100 AS "firstBloodBaronWinPercent" ,
+                TRUNC ((SELECT COUNT(*) FROM TEAMSTATS WHERE BARONKILLS=0 AND WIN='Win')/(SELECT COUNT(*) FROM TEAMSTATS WHERE BARONKILLS= 0),4)*100 AS "zeroBaronWinPercent",
+                TRUNC ((SELECT COUNT(*) FROM TEAMSTATS WHERE BARONKILLS=1 AND WIN='Win')/(SELECT COUNT(*) FROM TEAMSTATS WHERE BARONKILLS= 1),4)*100 AS "oneBaronWinPercent",
+                TRUNC ((SELECT COUNT(*) FROM TEAMSTATS WHERE BARONKILLS=2 AND WIN='Win')/(SELECT COUNT(*) FROM TEAMSTATS WHERE BARONKILLS= 2),4)*100 AS "twoBaronWinPercent",
+                TRUNC ((SELECT COUNT(*) FROM TEAMSTATS WHERE BARONKILLS=3 AND WIN='Win')/(SELECT COUNT(*) FROM TEAMSTATS WHERE BARONKILLS= 3),4)*100 AS "threeBaronWinPercent",
+                TRUNC ((SELECT COUNT(*) FROM TEAMSTATS WHERE FIRSTINHIBITOR=1 AND WIN='Win')/(SELECT COUNT(*) FROM TEAMSTATS WHERE FIRSTINHIBITOR= 1),4)*100 AS "firstEogjegiWinPercent",
+                TRUNC((SELECT COUNT(TEAMID) FROM TEAMSTATS WHERE TEAMID='100' AND WIN='Win')/(SELECT COUNT(TEAMID)  FROM TEAMSTATS WHERE TEAMID='100'), 4)*100 AS BWINPERCENT,
+                TRUNC((SELECT COUNT(TEAMID)  FROM TEAMSTATS  WHERE TEAMID='200' AND WIN='Win')/(SELECT COUNT(TEAMID) FROM TEAMSTATS WHERE TEAMID='200'), 4)*100 AS RWINPERCENT,
+                TRUNC ((SELECT COUNT(*)   FROM TEAMSTATS  WHERE FIRSTRIFTHERALD=1 AND WIN='Win')/(SELECT COUNT(*) FROM TEAMSTATS  WHERE FIRSTRIFTHERALD= 1),4)*100 AS "FIRSTRIFTHERALD" 
+   FROM TEAMSTATS
+</select>
+
+
+    <select id="dataTablePackage" resultType="DataTablePackageBoard">
+SELECT * FROM(SELECT ROWNUM RNUM , A.*, (SELECT TRUNC(COUNT(CHAMPIONID)/(SELECT COUNT(GAMEID)
+                                                                            FROM MATCH                                             
+                                                                            WHERE QUEUEID IN('420','440'))*100,2)
+                                            FROM TEAMBANS T
+                                            WHERE T.CHAMPIONID = A.CHAMPIONID
+                                            GROUP BY CHAMPIONID) AS BANPERCENT      
+                FROM(SELECT CHAMPNAME, CHAMPIONID, 
+                TRUNC(SUM(FIRSTBLOODKILL)/sum(decode(win, '1', 1, 1))*100, 2) as FB, 
+                TRUNC(SUM(DOUBLEKILLS)/sum(decode(win, '1', 1, 1))*100, 2) as DK, 
+                TRUNC(SUM(TRIPLEKILLS)/sum(decode(win, '1', 1, 1))*100, 2) as TK, 
+                TRUNC(SUM(QUADRAKILLS)/sum(decode(win, '1', 1, 1))*100, 2) as QK,
+                TRUNC(SUM(PENTAKILLS)/sum(decode(win, '1', 1, 1))*100, 2) as PK, 
+                TRUNC((AVG(KILLS)+AVG(ASSISTS))/AVG(DEATHS),2) AS CHAMPKDA,
+                TRUNC(AVG(TOTALDAMAGEDEALTTOCHAMPIONS),1) AS HIGHDAMAGE,
+                TRUNC(AVG(TOTALDAMAGETAKEN),1) AS HIGHDAMAGETAKEN, 
+                TRUNC(AVG(TURRETKILLS),1) AS TURRETKILL,
+                TRUNC(AVG(TOTALMINIONSKILLED)+AVG(NEUTRAKMINIONSKILLEDTEAMJUNGLE),1) AS HIGHMINIONKILL,
+                TRUNC(AVG(NEUTRAKMINIONSKILLEDTEAMJUNGLE),1) AS PASTJUNGLING,
+                TRUNC(AVG(TOTALHEAL),1) AS HEALTOP,
+                TRUNC(AVG(VISIONSCORE),1) AS WARDSCORE,
+                TRUNC(AVG(WARDSKILLED),1) AS WARDKILL,
+                TRUNC(sum(decode(win, '1', 1, 0))/sum(decode(win, '1', 1, 1)),4)*100 AS CHAMPWINPERCENT,
+                TRUNC(AVG(GOLDEARNED),1) AS HIGHGOLD,
+                TRUNC(sum(decode(win, '1', 1, 1))/(SELECT COUNT(GAMEID)/2 FROM teamstats)*100, 2) AS PICKPERCENT,
+                SUM(DECODE(WIN, '1', 1, 1)) AS PLAY,
+                CHAMPFULLIMG AS CHAMPIMG
+   FROM PARTICIPANTSTATS 
+   JOIN PATICIPANT USING(GAMEID,PARTICIPANTID)
+   JOIN CHAMPION USING(CHAMPIONID)
+   JOIN MATCH USING(GAMEID)
+   WHERE QUEUEID = '420'
+   GROUP BY CHAMPNAME, CHAMPIONID, CHAMPFULLIMG) A)
+</select>
+
+</mapper>

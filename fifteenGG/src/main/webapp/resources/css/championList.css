@@ -1,0 +1,112 @@
+.l-champion-index-content--main{
+    float: left;
+    width: 605px;
+    background-color: #f9f9fa;
+    border: solid 1px #e9eff4;
+    border-right: none;
+    box-sizing: border-box;
+}
+
+/* 선택 메뉴 */
+.champion-list-filter {
+    background-color: #fff;
+    border-bottom: solid 1px #e9eff4;
+}
+/* 선택 메뉴 밑에 바 */
+.champion-list-filter:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: "";
+    clear: both;
+    height: 0;
+}
+/* 선택 메뉴 ul */
+.champion-list-filter__type {
+    float: left;
+    margin-left: 20px;
+}
+
+li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    float : left;
+
+}
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    float : left;
+}
+.champion-list-filter__type__item {
+    display: inline-block;
+    float: left;
+
+}
+
+.champion-list-filter__type__item--active a {
+    font-weight: bold;
+    color: #4990e2;
+    border-bottom-color: #4990e2;
+}
+.champion-list-filter__type__item a {
+    display: block;
+    padding: 15px 7px;
+    line-height: 17px;
+    font-size: 14px;
+    color: #777;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    margin-left: 30px;
+}
+span {
+    display : block;
+}
+/* 챔피온 리스트 영역 */
+.champion-index__champion-list {
+    margin: 10px 8px;
+    font-size: 0;
+}
+/* 챔피언 리스트 div 한칸 */
+.champion-index__champion-item {
+    position: relative;
+    display: inline-block;
+    margin-top: 20px;
+    margin-left: 12px;
+    width: 84px;
+    vertical-align: top;
+    float : left;
+}
+/* 챔피온 리스트 이미지  */
+.champion-index__champion-item__image {
+    position: relative;
+    width: 82px;
+    height: 82px;
+    border: 2px solid #000;
+}
+/* 챔피온 리스트 이미지 아이콘 */
+.__spc82-33 {
+    background-position: 0px -2706px;
+    width: 82px;
+    height: 82px;
+}
+/* 챔피온 이미지 아래 이름 영역 */
+.champion-index__champion-item__name {
+    margin-top: 8px;
+    line-height: 15px;
+    font-size: 14px;
+    text-align: center;
+    color: #4a4a4a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

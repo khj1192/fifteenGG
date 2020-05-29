@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--suppress ALL -->
+<mapper namespace="detailpercentage-mapper">
+<!-- namespace : 현재 매퍼파일의 별칭 -->
+	<select id="spellPercentageList" parameterType="string" resultType="ChampionSpellRC">
+	<![CDATA[
+	SELECT * FROM
+    (SELECT ROWNUM rnum, A.*
+     FROM( SELECT
+               CHAMPNAME,
+               SPELL1,
+               SPELL2,
+               TRUNC(SUM(odds) / COUNT(odds) * 100, 2)               as odds,
+               TRUNC(count(*) / (select count(*)
+                                 FROM PARTICIPANTSTATS
+                                          JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+                                          JOIN CHAMPION USING (CHAMPIONID)
+                                 WHERE CHAMPNAME = #{name}) * 100, 2) as pickRate
+           FROM (SELECT CHAMPION.CHAMPNAME,
+                        CASE
+                            WHEN (S1.SPELLNO < S2.SPELLNO) THEN S1.SPELLNAME
+                            WHEN (S1.SPELLNO > S2.SPELLNO) THEN S2.SPELLNAME
+                            END                   SPELL1,
+                        CASE
+                            WHEN (S1.SPELLNO > S2.SPELLNO) THEN S1.SPELLNAME
+                            WHEN (S1.SPELLNO < S2.SPELLNO) THEN S2.SPELLNAME
+                            END                   SPELL2,
+                        decode(win, '1', 1, 0) as odds
+                 FROM PARTICIPANTSTATS
+                          JOIN PATICIPANT S USING (GAMEID, PARTICIPANTID)
+                          JOIN summonerspell S1 on S.SPELL1ID = S1.SPELLNO
+                          JOIN summonerspell S2 on S.SPELL2ID = S2.SPELLNO
+                          JOIN CHAMPION USING (CHAMPIONID)
+                 WHERE CHAMPNAME = #{name}
+                )
+           group by CHAMPNAME, SPELL1, SPELL2
+           order by PICKRATE desc, ODDS) A)
+		   WHERE RNUM < 3
+	
+	]]>
+	</select>
+	
+	<select resultType="ChampionRunRC" id="runRcList" parameterType="String">
+	<![CDATA[
+	SELECT *
+	FROM (
+         SELECT ROWNUM rnum, A.*
+         FROM (SELECT CHAMPNAME,
+                      PERKPRIMARYSTYLE,
+                      PERK0,
+                      PERK1,
+                      PERK2,
+                      PERK3,
+                      PERKSUBSTYLE,
+                      PERK4,
+                      PERK5,
+                      STATPERK0,
+                      STATPERK1,
+                      STATPERK2,
+                      TRUNC(sum(decode(win, '1', 1, 0)) / sum(decode(win, '1', 1, 1)) * 100, 2) as odds,
+                      TRUNC(count(*) / (select count(*)
+                                        FROM PARTICIPANTSTATS
+                                                 JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+                                                 JOIN CHAMPION USING (CHAMPIONID)
+                                        WHERE CHAMPNAME = #{championName}) * 100, 2)                    as pickRate
+               FROM PARTICIPANTSTATS
+                        JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+                        JOIN CHAMPION USING (CHAMPIONID)
+               WHERE CHAMPNAME = #{championName}
+               GROUP BY CHAMPNAME, PERKPRIMARYSTYLE, PERK0, PERK1, PERK2, PERK3, PERKSUBSTYLE, PERK4, PERK5, STATPERK0,
+                        STATPERK1, STATPERK2
+               ORDER BY pickRate DESC, odds DESC) A)
+		WHERE RNUM < 3
+		]]>
+	</select>
+	
+	<select id="itemList" parameterType="String" resultType="HashMap">
+	<![CDATA[
+			SELECT ITEM0, COUNT(*) CNT FROM (SELECT ITEM0
+				FROM PARTICIPANTSTATS
+				         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+				         JOIN CHAMPION USING (CHAMPIONID)
+				WHERE CHAMPNAME = #{championName}
+				UNION ALL
+				SELECT ITEM1
+				FROM PARTICIPANTSTATS
+				         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+				         JOIN CHAMPION USING (CHAMPIONID)
+				WHERE CHAMPNAME = #{championName}
+				UNION ALL
+				SELECT ITEM2
+				FROM PARTICIPANTSTATS
+				         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+				         JOIN CHAMPION USING (CHAMPIONID)
+				WHERE CHAMPNAME = #{championName}
+				UNION ALL
+				SELECT ITEM3
+				FROM PARTICIPANTSTATS
+				         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+				         JOIN CHAMPION USING (CHAMPIONID)
+				WHERE CHAMPNAME = #{championName}
+				UNION ALL
+				SELECT ITEM4
+				FROM PARTICIPANTSTATS
+				         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+				         JOIN CHAMPION USING (CHAMPIONID)
+				WHERE CHAMPNAME = #{championName}
+				UNION ALL
+				SELECT ITEM5
+				FROM PARTICIPANTSTATS
+				         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+				         JOIN CHAMPION USING (CHAMPIONID)
+				WHERE CHAMPNAME = #{championName}
+				) WHERE ITEM0 > 3000 AND ITEM0 < 3800
+				     AND ITEM0 != 0 AND ITEM0 != 2055 AND ITEM0 != 3111
+                     AND ITEM0 != 3020 AND ITEM0 != 3047 AND ITEM0 != 3006
+                     AND ITEM0 != 3117 AND ITEM0 != 3158 AND ITEM0 != 3009
+                     AND ITEM0 != 3133 AND ITEM0 != 3067 AND ITEM0 != 3108
+                     AND ITEM0 != 3191 AND ITEM0 != 3070 AND ITEM0 != 3140
+                     AND ITEM0 != 3134 AND ITEM0 != 3086 AND ITEM0 != 3751
+                     AND ITEM0 != 3077 AND ITEM0 != 3044 AND ITEM0 != 3155
+                     AND ITEM0 != 3057 AND ITEM0 != 3113 AND ITEM0 != 3123
+                     AND ITEM0 != 3052 AND ITEM0 != 3028 AND ITEM0 != 3035
+                     AND ITEM0 != 3105 AND ITEM0 != 3114 AND ITEM0 != 3024
+                     AND ITEM0 != 3144 AND ITEM0 != 3101 AND ITEM0 != 3076
+                     AND ITEM0 != 3082 AND ITEM0 != 3706 AND ITEM0 != 3122
+                     AND ITEM0 != 3400 AND ITEM0 != 3136 AND ITEM0 != 3073
+                     AND ITEM0 != 3715 AND ITEM0 != 3211
+				GROUP BY ITEM0 
+				ORDER BY 2 DESC, 1 ASC
+			]]>
+	</select>
+	
+	
+	
+	<select id="shoesList" parameterType="String" resultType="HashMap">
+		SELECT ITEM0, COUNT(*) CNT FROM (SELECT ITEM0
+			FROM PARTICIPANTSTATS
+			         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+			         JOIN CHAMPION USING (CHAMPIONID)
+			WHERE CHAMPNAME = #{championName}
+			UNION ALL
+			SELECT ITEM1
+			FROM PARTICIPANTSTATS
+			         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+			         JOIN CHAMPION USING (CHAMPIONID)
+			WHERE CHAMPNAME = #{championName}
+			UNION ALL
+			SELECT ITEM2
+			FROM PARTICIPANTSTATS
+			         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+			         JOIN CHAMPION USING (CHAMPIONID)
+			WHERE CHAMPNAME = #{championName}
+			UNION ALL
+			SELECT ITEM3
+			FROM PARTICIPANTSTATS
+			         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+			         JOIN CHAMPION USING (CHAMPIONID)
+			WHERE CHAMPNAME = #{championName}
+			UNION ALL
+			SELECT ITEM4
+			FROM PARTICIPANTSTATS
+			         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+			         JOIN CHAMPION USING (CHAMPIONID)
+			WHERE CHAMPNAME = #{championName}
+			UNION ALL
+			SELECT ITEM5
+			FROM PARTICIPANTSTATS
+			         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+			         JOIN CHAMPION USING (CHAMPIONID)
+			WHERE CHAMPNAME = #{championName}
+			) WHERE ITEM0 IN (3111 , 3020 , 3047, 3006, 3117, 3158, 3009)
+			GROUP BY ITEM0
+			ORDER BY 2 DESC, 1 ASC
+	</select>
+	
+	<select id="startList" parameterType="String" resultType="HashMap">
+		SELECT ITEM0, COUNT(*) CNT FROM (SELECT ITEM0
+			FROM PARTICIPANTSTATS
+			         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+			         JOIN CHAMPION USING (CHAMPIONID)
+			WHERE CHAMPNAME = #{championName}
+			UNION ALL
+			SELECT ITEM1
+			FROM PARTICIPANTSTATS
+			         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+			         JOIN CHAMPION USING (CHAMPIONID)
+			WHERE CHAMPNAME = #{championName}
+			UNION ALL
+			SELECT ITEM2
+			FROM PARTICIPANTSTATS
+			         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+			         JOIN CHAMPION USING (CHAMPIONID)
+			WHERE CHAMPNAME = #{championName}
+			UNION ALL
+			SELECT ITEM3
+			FROM PARTICIPANTSTATS
+			         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+			         JOIN CHAMPION USING (CHAMPIONID)
+			WHERE CHAMPNAME = #{championName}
+			UNION ALL
+			SELECT ITEM4
+			FROM PARTICIPANTSTATS
+			         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+			         JOIN CHAMPION USING (CHAMPIONID)
+			WHERE CHAMPNAME = #{championName}
+			UNION ALL
+			SELECT ITEM5
+			FROM PARTICIPANTSTATS
+			         JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+			         JOIN CHAMPION USING (CHAMPIONID)
+			WHERE CHAMPNAME = #{championName}
+			) WHERE ITEM0 IN (2003,3862,1036,2031,1039,1027,1082,
+			                  1041,1056,3850,3854,3858,1028,1055,
+			                  1052,1054,1083,2033)
+			GROUP BY ITEM0
+			ORDER BY 2 DESC, 1 ASC
+	</select>
+	
+	<select id="champChart" parameterType="String" resultType="HashMap">
+   <![CDATA[
+         SELECT * FROM
+        (SELECT CHAMPNAME , 
+      TRUNC(sum(decode(win, '1', 1, 0))/sum(decode(win, '1', 1, 1))*100,2) as odds,
+              sum(decode(win, '1', 1, 1)) as pansu,
+      TRUNC(sum(decode(win, '1', 1, 1))/(SELECT COUNT(GAMEID)/2 FROM teamstats)*100, 2) AS PICKPERCENT
+      FROM PARTICIPANTSTATS
+               JOIN PATICIPANT USING (GAMEID, PARTICIPANTID)
+               JOIN CHAMPION USING (CHAMPIONID)
+      WHERE CHAMPNAME = #{championName}
+      GROUP BY CHAMPNAME 
+      ORDER BY 1 DESC , 2 DESC)
+      ]]>
+   </select>
+	
+	<select id="benPerChart" parameterType="String" resultType="HashMap">
+   <![CDATA[
+      SELECT  TRUNC(COUNT(CHAMPIONID)/(SELECT COUNT(GAMEID)/10 
+   FROM teambans)*100, 2) benPercent, CHAMPNAME
+   FROM TEAMBANS
+   LEFT JOIN CHAMPION USING(CHAMPIONID)
+   WHERE CHAMPNAME = #{championName}
+   GROUP BY CHAMPIONID, CHAMPNAME
+   ORDER BY COUNT(CHAMPIONID) DESC
+   ]]>
+   </select>
+   
+</mapper>
